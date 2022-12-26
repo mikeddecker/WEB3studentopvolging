@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// SCHEMA'S
+
+model Groep {
+  id           Int            @id @default(autoincrement())
+  naam         String
+  aanmaakDatum DateTime       @default(now())
+  geldig       Int            @default(1)
+  groepen      GroepStudent[]
+}
+
+model Student {
+  id             Int            @id @default(autoincrement())
+  code           String         @db.VarChar(255)
+  gebruikersNaam String         @db.VarChar(45)
+  familieNaam    String         @db.VarChar(45)
+  voorNaam       String         @db.VarChar(45)
+  sorteerNaam    String         @db.VarChar(90)
+  email          String
+  aanmaakDatum   DateTime       @default(now())
+  geldig         Int            @default(1)
+  groepen        GroepStudent[]
+  rapporten      Rapport[]
+}
+
+model GroepStudent {
+  groep        Groep    @relation(fields: [groepId], references: [id])
+  groepId      Int
+  student      Student  @relation(fields: [studentId], references: [id])
+  studentId    Int
+  aanmaakDatum DateTime @default(now())
+  geldig       Int      @default(1)
+
+  @@id([groepId, studentId])
+}
+
+model Opdracht {
+  id           Int               @id @default(autoincrement())
+  naam         String            @unique @db.VarChar(512)
+  aanmaakDatum DateTime          @default(now())
+  geldig       Int               @default(1)
+  elementen    OpdrachtElement[]
+}
+
+model OpdrachtElement {
+  id           Int       @id @default(autoincrement())
+  beschrijving String    @db.VarChar(4096)
+  minuten      Decimal   @default(1) @db.Decimal(5, 2)
+  aanmaakDatum DateTime  @default(now())
+  geldig       Int       @default(1)
+  opdracht     Opdracht  @relation(fields: [opdrachtId], references: [id])
+  opdrachtId   Int
+  rapporten    Rapport[]
+}
+
+model Rapport {
+  id                Int             @id @default(autoincrement())
+  status            Int             @default(0)
+  extraMinuten      Decimal         @default(0) @db.Decimal(5, 2)
+  aanmaakDatum      DateTime        @default(now())
+  geldig            Int             @default(1)
+  student           Student         @relation(fields: [studentId], references: [id])
+  studentId         Int
+  opdrachtElement   OpdrachtElement @relation(fields: [opdrachtElementId], references: [id])
+  opdrachtElementId Int
+  vragen            VraagStudent[]
+}
+
+model VraagStudent {
+  id           Int      @id @default(autoincrement())
+  beschrijving String
+  aanmaakDatum DateTime @default(now())
+  geldig       Int      @default(1)
+  rapport      Rapport  @relation(fields: [rapportId], references: [id])
+  rapportId    Int
+}
