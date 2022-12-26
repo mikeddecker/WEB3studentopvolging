@@ -11,11 +11,11 @@ CREATE TABLE `Groep` (
 -- CreateTable
 CREATE TABLE `Student` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `code` VARCHAR(191) NOT NULL,
-    `gebruikersNaam` VARCHAR(191) NOT NULL,
-    `familieNaam` VARCHAR(191) NOT NULL,
-    `voorNaam` VARCHAR(191) NOT NULL,
-    `sorteerNaam` VARCHAR(191) NOT NULL,
+    `code` VARCHAR(255) NOT NULL,
+    `gebruikersNaam` VARCHAR(45) NOT NULL,
+    `familieNaam` VARCHAR(45) NOT NULL,
+    `voorNaam` VARCHAR(45) NOT NULL,
+    `sorteerNaam` VARCHAR(90) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
     `aanmaakDatum` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `geldig` INTEGER NOT NULL DEFAULT 1,
@@ -36,7 +36,7 @@ CREATE TABLE `GroepStudent` (
 -- CreateTable
 CREATE TABLE `Opdracht` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `naam` VARCHAR(191) NOT NULL,
+    `naam` VARCHAR(512) NOT NULL,
     `aanmaakDatum` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `geldig` INTEGER NOT NULL DEFAULT 1,
 
@@ -47,8 +47,8 @@ CREATE TABLE `Opdracht` (
 -- CreateTable
 CREATE TABLE `OpdrachtElement` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `beschrijving` VARCHAR(191) NOT NULL,
-    `minuten` INTEGER NOT NULL DEFAULT 1,
+    `beschrijving` VARCHAR(4096) NOT NULL,
+    `minuten` DECIMAL(5, 2) NOT NULL DEFAULT 1,
     `aanmaakDatum` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `geldig` INTEGER NOT NULL DEFAULT 1,
     `opdrachtId` INTEGER NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE `OpdrachtElement` (
 CREATE TABLE `Rapport` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `status` INTEGER NOT NULL DEFAULT 0,
-    `extraMinuten` INTEGER NOT NULL DEFAULT 0,
+    `extraMinuten` DECIMAL(5, 2) NOT NULL DEFAULT 0,
     `aanmaakDatum` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `geldig` INTEGER NOT NULL DEFAULT 1,
     `studentId` INTEGER NOT NULL,
