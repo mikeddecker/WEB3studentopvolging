@@ -173,7 +173,7 @@ const StudentController = {
   count: async (req, res) => {
     try {
       const count = await db.student.count();
-      res.status(200).send(count);
+      res.status(200).json(count);
     } catch (error) {
       res.status(500).send(error);
     }
