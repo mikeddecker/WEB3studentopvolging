@@ -17,7 +17,7 @@ async function main() {
   const queries = ["findMany", "findFirst", "findUnique"];
 
   // Middleware SOFT DELETE
-  prisma.$use(async (params, next) => {
+  prisma.$use((params, next) => {
     if (models.includes(params.model)) {
       if (params.action === "delete") {
         params.action = "update";
@@ -32,7 +32,7 @@ async function main() {
         }
       }
     }
-    return await next(params);
+    return next(params);
   });
 }
 

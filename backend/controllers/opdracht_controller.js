@@ -98,6 +98,27 @@ const OpdrachtController = {
       res.status(500).send(error);
     }
   },
+  getAllOpdrachten: async (req, res) => {
+    const opdrachtNaam = req.params.name;
+
+    try {
+      const opdrachten = await db.opdracht.findMany({
+        where: {
+          geldig: 1,
+        },
+        include: {
+          elementen: {
+            where: {
+              geldig: 1,
+            },
+          },
+        },
+      });
+      res.status(202).json(opdrachten);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
 };
 
 module.exports = OpdrachtController;

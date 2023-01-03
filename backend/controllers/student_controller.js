@@ -106,7 +106,7 @@ const StudentController = {
   login: async (req, res) => {
     // TODO: Validatie
     const { email, pincode } = req.body;
-
+    console.log(`logging in ${email}, ${pincode}`);
     try {
       const student = await db.student.findFirst({
         where: {
@@ -114,9 +114,11 @@ const StudentController = {
           geldig: 1,
         },
       });
-
+      //console.log(student.code);
       if (student) {
-        const result = await bcrypt.compare(pincode, student.code);
+        //console.log(`${pincode}, ${student.code}`)
+        const result = pincode === student.code;
+        //const result = await bcrypt.compare(pincode, student.code);
         if (result) {
           const token = jwt.sign(
             { id: student.id, email: student.email },
@@ -126,7 +128,7 @@ const StudentController = {
             }
           );
 
-          console.log(token);
+          console.log(`${student.email} logged in with token : ${token}`);
 
           res.cookie("student_token", token, {
             httpOnly: true,
@@ -138,12 +140,15 @@ const StudentController = {
         } else {
           res.status(403).send("Pincode verkeerd");
         }
+      } else {
+        res.status(403).send(`Geen student ${email} gevonden`)
       }
     } catch (error) {
       res.status(500).send(error);
     }
   },
   verifyToken: async (req, res) => {
+    //res.status(202).send("student test");
     if (req.cookies && req.cookies.student_token) {
       const token = req.cookies.student_token;
       const student = jwt.verify(token, process.env.JWT_SECRET);
@@ -153,7 +158,7 @@ const StudentController = {
         res.status(403).send("Unauthorized");
       }
     } else {
-      res.status(403).send("Unauthorized");
+      res.status(200).send("OK, no cookies on this site yet");
     }
   },
   delete: async (req, res) => {

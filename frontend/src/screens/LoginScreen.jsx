@@ -11,6 +11,7 @@ import { appUrl } from "../utils/constants";
 const LoginScreen = () => {
   const navigate = useNavigate();
 
+  console.log("useAuthContextFromLoginscreen");
   const { isAuthenticated } = useAuthContext();
 
   const [login, setLogin] = useState({
@@ -27,11 +28,12 @@ const LoginScreen = () => {
 
   const handleSubmit = async () => {
     // Login versturen naar de server - student
-
+    console.log("klik");
     try {
+      //const response = await axios.post(appUrl + "/students/login", login, {withCredentials: true});
       const response = await axios.post(appUrl + "/students/login", login, {withCredentials: true});
-
       if (response.status === 202) {
+        
         navigate("/");
       }
     } catch (error) {
