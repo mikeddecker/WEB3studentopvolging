@@ -135,7 +135,7 @@ const StudentController = {
             // secure: true   --> Only if https
             maxAge: 4 * 60 * 60 * 1000,
           });
-
+          
           res.status(202).send("ok");
         } else {
           res.status(403).send("Pincode verkeerd");
@@ -144,6 +144,7 @@ const StudentController = {
         res.status(403).send(`Geen student ${email} gevonden`)
       }
     } catch (error) {
+      console.log(error);
       res.status(500).send(error);
     }
   },
