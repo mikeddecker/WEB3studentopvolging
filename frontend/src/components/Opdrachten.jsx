@@ -13,10 +13,11 @@ const Opdrachten = ({ setSelectedElement }) => {
       })
       .then((data) => {
         setOpdrachten(data);
+        console.log(data);
       })
       .catch((err) => console.log(err));
   }, []);
-
+  console.log("displaying opdrachten");
   return (
     <div>
       <h1>Student View</h1>

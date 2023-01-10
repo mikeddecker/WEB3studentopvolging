@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        console.log("appurl : " + appUrl);
+        console.log(appUrl);
         const response = await axios.get(appUrl + "/students/verifytoken", {withCredentials: true});
 
         if (response.status === 202) {
@@ -25,15 +25,14 @@ export const AuthProvider = ({ children }) => {
 
           if(socketContext.isConnected)
           {
-            console.log("Sending since connected...");
+            console.log("Sending 'you there!' since connected...");
             socketContext.socket.emit("helo", "you there!");
           }
           else {
             console.log("Not connected");
           }
-        } else if (response.status === 200){
-          // No cookies on this site yet
-          console.log("you have no cookies on this site yet");
+        } else {
+          setIsAuthenticated(false);
         }
 
       } catch (error) {

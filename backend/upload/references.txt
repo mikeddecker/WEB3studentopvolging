@@ -1,0 +1,2 @@
+opdrachtElement? - https://www.robinwieruch.de/javascript-variable-question-mark/#:~:text=The%20question%20mark%20in%20JavaScript,assign%20a%20variable%20name%20conditionally.
+Timer - https://www.npmjs.com/package/react-timer-hook

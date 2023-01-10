@@ -8,56 +8,80 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from 'axios';
+import { useSockets } from "../contexts/socketContext";
 
 import { appUrl } from "../utils/constants";
 
 const OpdrachtFormScreen = ({ element }) => {
-
   const [rapport, setRapport] = useState(null);
   const [status, setStatus] = useState(0);
   const [question, setQuestion] = useState("");
   const [questions, setQuestions] = useState([]);
   const [xtraTime, setXtraTime] = useState(0);
 
+  const socketContext = useSockets();
+  
+
+  console.log('OpdrachtFormScreenDisplayed');
   useEffect(() => {
     const getRapport = async () => {
-      const response = await axios.post(appUrl + "/rapporten/opdrachtelement", {elementId: element.id}, {withCredentials: true});
-
-      if (response.status === 200) {
-        const rapport = response.data;
+      const findResponse = await axios.post(appUrl + "/rapporten/opdrachtelement", { elementId: element.id }, { withCredentials: true });
+      console.log("eventueel rapport ontvangen");
+      let rapport;
+      if (findResponse.status === 200) {
+        console.log('rapport gekregen');
+        rapport = findResponse.data;
+      } else if (findResponse.status === 204) {
+        console.log("geen rapport gekregen, rapport laten aanmaken");
+        const createResponse = await axios.post(appUrl + "/rapporten/create", { elementId: element.id }, { withCredentials: true });
+        if (createResponse.status === 200) {
+          console.log("rapport aangemaakt");
+          rapport = createResponse.data;
+        }
+      }
+      if (rapport) {
+        console.log("Rapport displayen");
         setRapport(rapport);
         setStatus(rapport.status);
         setXtraTime(Number.parseInt(rapport.extraMinuten));
-        setQuestions(rapport.vragen);
+        setQuestions(rapport.vragen ? rapport.vragen : []);
+        console.log(rapport);
       } else {
-        console.log("Geen rapport gevonden voor deze student");
+        console.error("Er ging iets mis");
       }
     };
 
     getRapport();
+    console.log('OpdrachtFormScreenDisplayed');
   }, [element]);
 
   const handleStatusChange = (event) => {
     setStatus(Number.parseInt(event.target.value));
+    console.log('status changed');
   };
 
   const handleStatusClick = async (event) => {
+    console.log('handleStatusClick - socket this');
+    console.log(status);
     await axios.post(
       appUrl + "/rapporten/updatestatus",
       {
-        elementId: element.id,
+        rapportId: rapport.id,
         status: status,
       },
       {
         withCredentials: true,
       }
     );
+    console.log("Setting up emit for status change");
+    socketContext.socket.emit("studentRapportUpdate");
   };
 
   const handleSubmitQuestion = async () => {
+    console.log('handleSubmitQuestion - socket this');
     const response = await axios.post(
       appUrl + "/rapporten/addQuestion",
-      { elementId: element.id, question: question },
+      { rapportID: rapport.id, question: question },
       { withCredentials: true }
     );
 
@@ -70,14 +94,16 @@ const OpdrachtFormScreen = ({ element }) => {
       setQuestions([...questions, newQuestion]);
     }
     setQuestion("");
+    socketContext.socket.emit("studentRapportUpdate");
   };
 
   const handleExtraTime = async (extraTijd) => {
+    console.log('handleExtraTime - socket this');
     const response = await axios.post(
       appUrl + "/rapporten/extratijd",
       {
-        elementId: element.id,
-        extraTijd: extraTijd,
+        rapportId: rapport.id,
+        xtraTime: extraTijd,
       },
       {
         withCredentials: true,
@@ -87,9 +113,11 @@ const OpdrachtFormScreen = ({ element }) => {
     if (response.status === 200) {
       setXtraTime(extraTijd);
     }
+    socketContext.socket.emit("studentRapportUpdate");
   };
 
   const handleSubmit = (ev) => {
+    console.log('handleSubmit(ev)', ev);
     ev.preventDefault();
   };
 
@@ -113,8 +141,7 @@ const OpdrachtFormScreen = ({ element }) => {
           <Form.Check
             type="radio"
             checked={status === 2}
-            label="
-        Ik doe niet mee"
+            label="Ik doe niet mee"
             name="status"
             value={2}
             onChange={handleStatusChange}

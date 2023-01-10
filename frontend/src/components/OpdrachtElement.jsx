@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 const OpdrachtElement = ({ element, setSelectedElement, host = false }) => {
   const navigate = useNavigate();
-
   const handleClick = (element) => {
     setSelectedElement(element);
+    console.log("Opdracht element");
     if (host) {
       navigate("/dashboard");
     } else {

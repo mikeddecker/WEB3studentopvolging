@@ -29,6 +29,7 @@ app.use("/", routers);
 
 // Aanmaken van de HTTP server
 const server = http.createServer(app);
+
 // Het aanmaken van de socket.io instantie
 const io = new Server(server, {
   cors: {
@@ -46,7 +47,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("helo", (m) => { console.log(m); });
+
+  // Statuschange doorgeven aan host
+  socket.on("studentRapportUpdate", () => { console.log("rapportupdate van student"); io.emit("dashboardChange"); })
 });
+
+
 
 server.listen(process.env.SERVER_PORT || 3000, () => {
   console.log("Server is listening on port: ", process.env.SERVER_PORT || 3000);

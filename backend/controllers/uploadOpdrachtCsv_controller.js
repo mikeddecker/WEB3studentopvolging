@@ -7,9 +7,9 @@ const path = require("path");
 
 const UploadController = {
     upload: (req, res) => {
+        console.log("ok");
         try {
             let results = [];
-
             var r = fs.createReadStream(path.join(path.dirname(__dirname), "./upload/Opdrachten001.csv"))
                 .pipe(csv('{headers: false}')) // skip first row
                 .on("data", data => {

@@ -11,6 +11,8 @@ router.post(
   RapportController.findByUserElementId
 );
 
+router.post("/create", authMiddleware, RapportController.create);
+
 router.post("/updatestatus", authMiddleware, RapportController.updateStatus);
 
 router.post("/addquestion", authMiddleware, RapportController.addQuestion);

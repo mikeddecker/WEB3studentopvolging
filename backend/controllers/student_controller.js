@@ -104,7 +104,7 @@ const StudentController = {
     }
   },
   login: async (req, res) => {
-    // TODO: Validatie
+    // TODO: Check validatie
     const { email, pincode } = req.body;
     console.log(`logging in ${email}, ${pincode}`);
     try {
@@ -114,12 +114,12 @@ const StudentController = {
           geldig: 1,
         },
       });
-      //console.log(student.code);
       if (student) {
-        //console.log(`${pincode}, ${student.code}`)
-        const result = pincode === student.code;
+        const result = bcrypt.compareSync(pincode, student.code);
+        console.log(result);
         //const result = await bcrypt.compare(pincode, student.code);
         if (result) {
+          console.log(result);
           const token = jwt.sign(
             { id: student.id, email: student.email },
             process.env.JWT_SECRET,
@@ -150,7 +150,10 @@ const StudentController = {
   },
   verifyToken: async (req, res) => {
     //res.status(202).send("student test");
+    //console.log("verify token");
+    //console.log(req.cookies);
     if (req.cookies && req.cookies.student_token) {
+      console.log("verifying token");
       const token = req.cookies.student_token;
       const student = jwt.verify(token, process.env.JWT_SECRET);
       if (student) {

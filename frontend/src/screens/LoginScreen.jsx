@@ -24,16 +24,18 @@ const LoginScreen = () => {
       ...prevLogin,
       [event.target.name]: event.target.value,
     }));
+    console.log(login);
   };
 
   const handleSubmit = async () => {
     // Login versturen naar de server - student
     console.log("klik");
     try {
-      //const response = await axios.post(appUrl + "/students/login", login, {withCredentials: true});
+      console.log(login);
       const response = await axios.post(appUrl + "/students/login", login, {withCredentials: true});
       if (response.status === 202) {
-        
+        console.log(response.status);
+        // TODO : hij update hier de authStatus nog niet???
         navigate("/");
       }
     } catch (error) {
