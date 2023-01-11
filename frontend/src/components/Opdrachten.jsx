@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
 import OpdrachtElement from "./OpdrachtElement";
 import { appUrl } from "../utils/constants";
 
@@ -24,7 +23,7 @@ const Opdrachten = ({ setSelectedElement }) => {
       <hr />
       {/* <p>Connected: {"" + isConnected}</p> */}
       {opdrachten.map((o) => (
-        <Container key={o.id}>
+        <div className="container" key={o.id}>
           <h1>{o.naam}</h1>
           {o.elementen.map((e) => (
             <OpdrachtElement
@@ -33,7 +32,7 @@ const Opdrachten = ({ setSelectedElement }) => {
               setSelectedElement={setSelectedElement}
             />
           ))}
-        </Container>
+        </div>
       ))}
     </div>
   );

@@ -11,15 +11,17 @@ function MyStopwatch(props) {
     start,
     pause,
     reset,
-  } = useStopwatch({ autoStart:false, onExpire: () => console.warn('onExpire called') });
-  
-  const seconden = props.seconden % 60;
-  const minuten = (props.seconden - seconden) % 60;
+  } = useStopwatch({ autoStart: false, onExpire: () => console.warn('onExpire called') });
+
+  let seconden = props.seconden % 60;
+  // parsing seconden naar 08 ipv 8
+  const minuten = (props.seconden - seconden) / 60;
+  if (seconden < 10) { seconden = "0" + seconden; }
 
   return (
-    <div style={{textAlign: 'center'}}>
-      <h1>Stopwatch tot {minuten}minuut {seconden}seconden</h1>
-      <div style={{fontSize: '100px'}}>
+    <div style={{ textAlign: 'center' }}>
+      <h1>Stopwatch tot {minuten}:{seconden}</h1>
+      <div style={{ fontSize: '100px' }}>
         <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
       </div>
       <p>{isRunning ? 'Running' : 'Not running'}</p>

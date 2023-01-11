@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
 import { Link } from "react-router-dom";
 import MyStopwatch from "../components/Stopwatch"
 import axios from 'axios';
@@ -7,7 +6,7 @@ import axios from 'axios';
 import ProgressBar from "react-bootstrap/ProgressBar";
 
 import { appUrl } from "../utils/constants";
-
+import styles from "../index.css"
 import { useSockets } from "../contexts/socketContext";
 
 const statussen = [
@@ -57,7 +56,8 @@ const DashboardScreen = ({ element }) => {
   console.log(seconds);
   console.log(opdrachtElement);
   const studentenMetRapport = opdrachtElement?.opdrachtElement.rapporten.length;
-  const stopwatchTijd =  Math.floor((opdrachtElement?.opdrachtElement.rapporten.map((r) => r.extraMinuten).reduce((xtraSec, xtraTijdStudent) => xtraSec + Number.parseInt(xtraTijdStudent), 0) * 60 + seconds) / studentenMetRapport) ;
+  const stopwatchTijd =  Math.floor((opdrachtElement?.opdrachtElement.rapporten.
+    map((r) => r.extraMinuten).reduce((xtraSec, xtraTijdStudent) => xtraSec + Number.parseInt(xtraTijdStudent), 0) * 60) / studentenMetRapport) + seconds;
   
 
   useEffect(() => {
@@ -71,11 +71,11 @@ const DashboardScreen = ({ element }) => {
   }, [element, timeElement]);
 
   return (
-    <Container>
+    <div className="container">
       <Link to={-1}>Terug naar opdrachten</Link>
       <h1>{element?.beschrijving}</h1>
       <hr />
-      <p>Last updated: {timeElement}</p>
+      <p className="text-pink-600 font-bold">Last updated: {timeElement}</p>
 
       <ProgressBar className="my-4">
         {statussen.map((s, idx) => (
@@ -100,7 +100,7 @@ const DashboardScreen = ({ element }) => {
 
       {opdrachtElement?.opdrachtElement.rapporten.map((oe) => (
         <div key={oe.id}>
-          <h3 className="text-muted">{`${oe.student.voorNaam} ${oe.student.familieNaam}`}</h3>
+          <h3 className="text-muted text-pink-600">{`${oe.student.voorNaam} ${oe.student.familieNaam}`}</h3>
           <hr />
           <h5>Status</h5>
           <p>{statussen[oe.status].label}</p>
@@ -118,7 +118,7 @@ const DashboardScreen = ({ element }) => {
           </ul>
         </div>
       ))}
-    </Container>
+    </div>
   );
 };
 

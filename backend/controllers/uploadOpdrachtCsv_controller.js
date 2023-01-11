@@ -7,13 +7,15 @@ const path = require("path");
 
 const UploadController = {
     upload: (req, res) => {
-        console.log("ok");
+        console.log("in upload method");
         try {
             let results = [];
-            var r = fs.createReadStream(path.join(path.dirname(__dirname), "./upload/Opdrachten001.csv"))
+            console.log(req.body.opdrachtlocatie);
+            var r = fs.createReadStream(path.join(path.dirname(__dirname), `./upload/${req.body.opdrachtlocatie}`))
                 .pipe(csv('{headers: false}')) // skip first row
                 .on("data", data => {
                     results.push(data);
+                    console.log(data);
                 })
                 .on("end", () => {
 
@@ -58,10 +60,11 @@ const UploadController = {
                         }
                     }, "");
                     
-                    res.status(200).json("OK");
+                    res.status(200).json("NOK");
                 }
-                );
+            );
         } catch (error) {
+            console.log(error);
             res.status(500).send(error);
         }
     },
