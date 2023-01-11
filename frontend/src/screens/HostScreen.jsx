@@ -4,21 +4,23 @@ import Container from "react-bootstrap/Container";
 import OpdrachtElement from "../components/OpdrachtElement";
 
 import { appUrl } from "../utils/constants";
+import axios from 'axios';
 
 const HostScreen = ({ setSelectedElement }) => {
   const [opdrachten, setOpdrachten] = useState([]);
 
   useEffect(() => {
-    fetch(appUrl + "/opdrachten")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setOpdrachten(data);
-      })
-      .catch((err) => console.log(err));
+    const getOpdrachten = async () => {
+      const response = await axios.get(appUrl + "/opdrachten");
+      if (response.status === 202) {
+        setOpdrachten(response.data);
+      } else {
+        console.error(response);
+      }
+    };
+    getOpdrachten();
   }, []);
-
+  console.log(opdrachten);
   return (
     <>
       <h1>Host View</h1>

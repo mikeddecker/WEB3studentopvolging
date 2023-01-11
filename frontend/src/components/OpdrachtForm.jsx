@@ -12,7 +12,7 @@ import { useSockets } from "../contexts/socketContext";
 
 import { appUrl } from "../utils/constants";
 
-const OpdrachtFormScreen = ({ element }) => {
+const OpdrachtForm = ({ element }) => {
   const [rapport, setRapport] = useState(null);
   const [status, setStatus] = useState(0);
   const [question, setQuestion] = useState("");
@@ -20,7 +20,7 @@ const OpdrachtFormScreen = ({ element }) => {
   const [xtraTime, setXtraTime] = useState(0);
 
   const socketContext = useSockets();
-  
+
 
   console.log('OpdrachtFormScreenDisplayed');
   useEffect(() => {
@@ -120,10 +120,9 @@ const OpdrachtFormScreen = ({ element }) => {
     console.log('handleSubmit(ev)', ev);
     ev.preventDefault();
   };
-
+  console.log(element.beschrijving);
   return (
     <Container>
-      <Link to={-1}>Terug naar opdrachten</Link>
       <h1>{element.beschrijving}</h1>
 
       <div className="my-4">
@@ -217,4 +216,4 @@ const OpdrachtFormScreen = ({ element }) => {
   );
 };
 
-export default OpdrachtFormScreen;
+export default OpdrachtForm;

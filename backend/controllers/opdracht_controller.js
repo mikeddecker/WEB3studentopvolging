@@ -118,7 +118,33 @@ const OpdrachtController = {
     } catch (error) {
       res.status(500).send(error);
     }
-  }
+  },
+  findKahootActief: async (req, res) => {
+    try{
+
+      const opdracht = await db.opdracht.findFirst({
+        where:{
+          geldig: 1,
+        },
+        include:{
+          elementen: {
+            where: {
+              kahootActief: true
+            }
+          }
+        }
+      });
+      console.log(opdracht);
+      if (opdracht) {
+        res.status(202).json(opdracht);
+      } else {
+        res.status(404).json("not found");
+      }
+    } catch (error){
+      console.log(error);
+      res.status(500).error(error);
+    }
+  },
 };
 
 module.exports = OpdrachtController;

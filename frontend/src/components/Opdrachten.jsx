@@ -1,39 +1,46 @@
 import React, { useState, useEffect } from "react";
 import OpdrachtElement from "./OpdrachtElement";
 import { appUrl } from "../utils/constants";
+import OpdrachtForm from "./OpdrachtForm";
 
 const Opdrachten = ({ setSelectedElement }) => {
-  const [opdrachten, setOpdrachten] = useState([]);
+  const [kahootOpdracht, setKahootOpdracht] = useState(undefined);
 
   useEffect(() => {
-    fetch(appUrl + "/opdrachten")
+    fetch(appUrl + "/opdrachten/kahoot")
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        setOpdrachten(data);
+        setKahootOpdracht(data);
         console.log(data);
+        console.log("datalogged");
       })
       .catch((err) => console.log(err));
   }, []);
+
   console.log("displaying opdrachten");
+  let aantalElementen = 0;
+  if (kahootOpdracht) {
+
+    aantalElementen = kahootOpdracht ? kahootOpdracht.elementen.length : 0;
+    console.log(kahootOpdracht.elementen);
+    console.log(setSelectedElement);
+    console.log();
+  }
   return (
     <div>
       <h1>Student View</h1>
       <hr />
       {/* <p>Connected: {"" + isConnected}</p> */}
-      {opdrachten.map((o) => (
-        <div className="container" key={o.id}>
-          <h1>{o.naam}</h1>
-          {o.elementen.map((e) => (
-            <OpdrachtElement
-              key={e.id}
-              element={e}
-              setSelectedElement={setSelectedElement}
-            />
-          ))}
+      {aantalElementen > 0 ?
+        <div className="container">
+          <h2>{kahootOpdracht.naam}</h2>
+          <OpdrachtForm element={kahootOpdracht.elementen[0]} />
         </div>
-      ))}
+        :
+        <p>Geen opdracht beschikbaar</p>}
+
     </div>
   );
 };

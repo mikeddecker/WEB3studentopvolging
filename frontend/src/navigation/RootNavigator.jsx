@@ -6,7 +6,7 @@ import DashboardScreen from "../screens/DashboardScreen";
 import HomeScreen from "../screens/HomeScreen";
 import HostScreen from "../screens/HostScreen";
 import LoginScreen from "../screens/LoginScreen";
-import OpdrachtFormScreen from "../screens/OpdrachtFormScreen";
+//import OpdrachtFormScreen from "../screens/OpdrachtFormScreen";
 import ProtectedRoute from "./ProtectedRoute";
 
 const RootNavigator = () => {
@@ -25,14 +25,14 @@ const RootNavigator = () => {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/element"
           element={
             <ProtectedRoute>
               <OpdrachtFormScreen element={selectedElement} />
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/host"
           element={<HostScreen setSelectedElement={setSelectedElement} />}

@@ -40,24 +40,21 @@ const DashboardScreen = ({ element }) => {
   const socketContext = useSockets();
   const [opdrachtElement, setOpdrachtElement] = useState(null);
   const [timeElement, setTimeElement] = useState((new Date(Date.now())).toISOString());
-  
+
   socketContext.socket.on("dashboardChange", () => { console.log("een student heeft zijn rapport gewijzigd"); setTimeElement((new Date(Date.now())).toISOString()); });
-  
-  
+
+
   const occurrences = [0, 0, 0, 0, 0];
   opdrachtElement?.opdrachtElement.rapporten
     .map((r) => r.status)
     .map((s) => (occurrences[s] = occurrences[s] + 1));
 
-  
-    //opdrachtElement?.opdrachtElement.rapporten.map((r) => r.extraMinuten).map((xtra) => xtraMinuten.add(xtra));
-  const seconds = opdrachtElement?.opdrachtElement.minuten * 60;
-  console.log(seconds);
-  console.log(opdrachtElement);
+  //opdrachtElement?.opdrachtElement.rapporten.map((r) => r.extraMinuten).map((xtra) => xtraMinuten.add(xtra));
+  const secondenOpdracht = opdrachtElement?.opdrachtElement.minuten * 60;
   const studentenMetRapport = opdrachtElement?.opdrachtElement.rapporten.length;
-  const stopwatchTijd =  Math.floor((opdrachtElement?.opdrachtElement.rapporten.
-    map((r) => r.extraMinuten).reduce((xtraSec, xtraTijdStudent) => xtraSec + Number.parseInt(xtraTijdStudent), 0) * 60) / studentenMetRapport) + seconds;
-  
+  const stopwatchTijd = Math.floor((opdrachtElement?.opdrachtElement.rapporten.
+    map((r) => r.extraMinuten).reduce((xtraSec, xtraTijdStudent) => xtraSec + Number.parseInt(xtraTijdStudent), 0) * 60) / studentenMetRapport) + secondenOpdracht;
+
 
   useEffect(() => {
     const getStudentRapports = async () => {
@@ -68,6 +65,26 @@ const DashboardScreen = ({ element }) => {
     };
     getStudentRapports();
   }, [element, timeElement]);
+
+
+  //if (!openKahoot && element?.id) { updateKahoot(element?.id,true); }
+  useEffect(() => {
+    const updateKahootstatusOpdracht = async () => {
+      console.log(opdrachtElement);
+      if (opdrachtElement) {
+        console.log("ja?");
+
+        const response = await axios.post(appUrl + `/opdrachten/kahoot/${opdrachtElement.opdrachtElement.id}`, { actief: true }, { withCredentials: true });
+        console.log(response.status);
+        if (response.status === 200) {
+          console.log('kahoot actief gezet');
+        } else {
+          console.warn("kahoot niet kunnen updaten");
+        }
+      }
+    };
+    updateKahootstatusOpdracht();
+  }, [opdrachtElement]);
 
   return (
     <div className="container">

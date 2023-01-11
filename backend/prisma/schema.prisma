@@ -62,6 +62,7 @@ model OpdrachtElement {
   opdracht     Opdracht  @relation(fields: [opdrachtId], references: [id])
   opdrachtId   Int
   rapporten    Rapport[]
+  kahootActief Boolean   @default(false)
 }
 
 model Rapport {
