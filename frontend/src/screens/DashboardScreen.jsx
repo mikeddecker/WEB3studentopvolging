@@ -6,7 +6,6 @@ import axios from 'axios';
 import ProgressBar from "react-bootstrap/ProgressBar";
 
 import { appUrl } from "../utils/constants";
-import styles from "../index.css"
 import { useSockets } from "../contexts/socketContext";
 
 const statussen = [
@@ -61,13 +60,13 @@ const DashboardScreen = ({ element }) => {
   
 
   useEffect(() => {
-    const getStudentsCount = async () => {
+    const getStudentRapports = async () => {
       const response = await axios.get(appUrl + `/opdrachten/element/${element?.id}`);
       if (response.status === 200) {
         setOpdrachtElement(response.data);
       }
     };
-    getStudentsCount();
+    getStudentRapports();
   }, [element, timeElement]);
 
   return (
