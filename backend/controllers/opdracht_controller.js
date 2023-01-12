@@ -130,7 +130,7 @@ const OpdrachtController = {
       if (opdrachtElement) {
         res.status(202).json(opdrachtElement);
       } else {
-        res.status(404).json("not found");
+        res.status(204).send();
       }
     } catch (error){
       console.log(error);

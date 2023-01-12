@@ -47,12 +47,12 @@ export const AuthProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
-      isAuthenticated,
+      isAuthenticated
     }),
     [isAuthenticated]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value, isAuthenticated, setIsAuthenticated}>{children}</AuthContext.Provider>;
 };
 
 // we exporteren de custom hook:

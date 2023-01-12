@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import OpdrachtElement from "./OpdrachtElement";
 import { appUrl } from "../utils/constants";
 import OpdrachtForm from "./OpdrachtForm";
 import { useSockets } from "../contexts/socketContext";
@@ -18,21 +17,10 @@ const Opdracht = ({ setSelectedElement }) => {
       console.log(response.status);
       console.log(response);
       setKahootOpdrachtElement(response.data);
-      await setTimeout(100);
+      await setTimeout(200); // enkel wegens snelle rendering dat die zo soms nog wel en soms nog niet de nieuwe rapporten ophaald
       socketContext.socket.emit('studentRapportUpdate');
     }
     getKahootOpdracht();
-    //socketContext.socket.on("nieuw", () => { console.log("nieuwe kahootvraag gekregen van server"); console.log("oe"); console.log("oe"); });
-    // fetch()
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     setKahootOpdrachtElement(data);
-    //     console.log(data);
-    //     console.log("datalogged");
-    //   })
-    //   .catch((err) => console.log(err));
   }, [socketContext?.socket, tmpBeschr]);
 
 
