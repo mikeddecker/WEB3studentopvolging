@@ -53,8 +53,9 @@ const OpdrachtElementController = {
   updateKahootStatus: async (req,res) => {
     const { id } = req.params;
     const { actief } = req.body;
-    
+    console.log('update kahootstatus')
     try {
+      // Eerst alle mogelijke andere kahootvragen deactiveren;
       await db.opdrachtElement.updateMany({
         where: {
           kahootActief: true
@@ -63,6 +64,9 @@ const OpdrachtElementController = {
           kahootActief: false
         }
       });
+      console.log('update kahootstatus')
+
+      // Doorgekregen opdrachtkahoot actief maken
       const update = await db.opdrachtElement.update({
         where:{
           id: Number.parseInt(id),
@@ -71,8 +75,8 @@ const OpdrachtElementController = {
           kahootActief: actief
         }
       });
-      console.log(update.opdrachtId);
-      if (update.opdrachtId > 0) {
+      
+      if (update.opdrachtId >= 0) {
         console.log(update);
         res.status(200).json(update);
       } else {
@@ -85,6 +89,8 @@ const OpdrachtElementController = {
   },
   sluitkahoots: async (req,res) => {
     try {
+      console.log('sluit kahoots');
+      const {data} = req.body.data;
       const update = await db.opdrachtElement.updateMany({
         where: {
           kahootActief: true
@@ -93,9 +99,10 @@ const OpdrachtElementController = {
           kahootActief: false
         }
       });
-      console.log(update);
-      if (update > 0) {
+      if (update.count > 0) {
         console.log(update);
+        res.status(200).json(update);
+      } else if (update.count === 0) {
         res.status(200).json(update);
       } else {
         res.status(404).send("failed");

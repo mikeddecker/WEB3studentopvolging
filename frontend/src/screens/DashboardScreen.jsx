@@ -42,8 +42,7 @@ const DashboardScreen = ({ element }) => {
   const [timeElement, setTimeElement] = useState((new Date(Date.now())).toISOString());
 
   socketContext.socket.on("dashboardChange", () => { console.log("een student heeft zijn rapport gewijzigd"); setTimeElement((new Date(Date.now())).toISOString()); });
-
-
+  
   const occurrences = [0, 0, 0, 0, 0];
   opdrachtElement?.opdrachtElement.rapporten
     .map((r) => r.status)
@@ -60,6 +59,7 @@ const DashboardScreen = ({ element }) => {
     const getStudentRapports = async () => {
       const response = await axios.get(appUrl + `/opdrachten/element/${element?.id}`);
       if (response.status === 200) {
+        console.log(response.data);
         setOpdrachtElement(response.data);
       }
     };
@@ -73,14 +73,23 @@ const DashboardScreen = ({ element }) => {
       console.log(opdrachtElement);
       if (opdrachtElement) {
         console.log("ja?");
-
-        const response = await axios.post(appUrl + `/opdrachten/kahoot/${opdrachtElement.opdrachtElement.id}`, { actief: true }, { withCredentials: true });
-        console.log(response.status);
-        if (response.status === 200) {
-          console.log('kahoot actief gezet');
-        } else {
-          console.warn("kahoot niet kunnen updaten");
-        }
+        let opdrachtOpKahootKunnenZetten = false;
+        do {
+          console.log(opdrachtElement.opdrachtElement.id);
+          const response = await axios.post(appUrl + `/opdrachten/kahoot/${opdrachtElement.opdrachtElement.id}`, { actief: true }, { withCredentials: true });
+          console.log("nee");
+          console.log(response.status);
+          if (response.status === 200) {
+            opdrachtOpKahootKunnenZetten = true;
+            console.log("beschrijving");
+            console.log(opdrachtElement.beschrijving);
+            console.log(opdrachtElement);
+            socketContext.socket.emit("nkvh", opdrachtElement.opdrachtElement.beschrijving);
+            console.log('kahoot actief gezet');
+          } else {
+            console.warn("kahoot niet kunnen updaten");
+          }
+        } while (!opdrachtOpKahootKunnenZetten);
       }
     };
     updateKahootstatusOpdracht();

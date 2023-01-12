@@ -122,21 +122,13 @@ const OpdrachtController = {
   findKahootActief: async (req, res) => {
     try{
 
-      const opdracht = await db.opdracht.findFirst({
+      const opdrachtElement = await db.opdrachtElement.findFirst({
         where:{
-          geldig: 1,
+          kahootActief: true,
         },
-        include:{
-          elementen: {
-            where: {
-              kahootActief: true
-            }
-          }
-        }
       });
-      console.log(opdracht);
-      if (opdracht) {
-        res.status(202).json(opdracht);
+      if (opdrachtElement) {
+        res.status(202).json(opdrachtElement);
       } else {
         res.status(404).json("not found");
       }

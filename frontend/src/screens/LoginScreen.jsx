@@ -13,12 +13,11 @@ const LoginScreen = () => {
 
   console.log("useAuthContextFromLoginscreen");
   const { isAuthenticated } = useAuthContext();
-
-  const [login, setLogin] = useState({
+    const [login, setLogin] = useState({
     email: "",
     pincode: "",
   });
-
+  
   const handleChange = (event) => {
     setLogin((prevLogin) => ({
       ...prevLogin,
@@ -26,7 +25,7 @@ const LoginScreen = () => {
     }));
     console.log(login);
   };
-
+  
   const handleSubmit = async () => {
     // Login versturen naar de server - student
     console.log("klik");

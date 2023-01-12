@@ -120,7 +120,7 @@ const OpdrachtForm = ({ element }) => {
     console.log('handleSubmit(ev)', ev);
     ev.preventDefault();
   };
-  console.log(element.beschrijving);
+  console.log(element);
   return (
     <Container>
       <h1>{element.beschrijving}</h1>

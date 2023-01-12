@@ -1,12 +1,14 @@
 import React from "react";
 
-import Opdrachten from "../components/Opdrachten";
+
+import Opdracht from "../components/Opdracht";
 
 const HomeScreen = ({ setSelectedElement }) => {
+
   console.log("display home screen");
   return (
     <div>
-      <Opdrachten setSelectedElement={setSelectedElement} />
+      <Opdracht setSelectedElement={setSelectedElement} />
     </div>
   );
 };

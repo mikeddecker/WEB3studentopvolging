@@ -48,11 +48,14 @@ io.on("connection", (socket) => {
 
   socket.on("helo", (m) => { console.log(m); });
 
-  // Statuschange doorgeven aan host
+  // rapportupdate doorgeven aan host
   socket.on("studentRapportUpdate", () => { console.log("rapportupdate van student"); io.emit("dashboardChange"); })
+
+  // Nieuwe kahootvraag doorgeven aan studenten
+  socket.on("nkvh", (beschrijving) => { io.emit("nkvs",beschrijving); console.log("NieuweKahootVraagHost, NieuweKahootVraagServer");});
+  // Student heeft kahoot opgehaald
+  //socket.on("studentConnecteerdMetVraag", () => {io.emit("studentConnecteerdMetVraag");})
 });
-
-
 
 server.listen(process.env.SERVER_PORT || 3000, () => {
   console.log("Server is listening on port: ", process.env.SERVER_PORT || 3000);
