@@ -20,8 +20,13 @@ const OpdrachtElement = ({ element, setSelectedElement, host = false }) => {
     }
   };
 
-  const widthVerhouding = (occ) => {
-    return `${occ}/${students}`==='1/1' ? 'full' : `${occ}/${students}`;
+  const widthVerhouding = (occArray) => {
+    // TODO update, 33/40 herkent hij niet
+    console.log(occArray);
+    let occ = occArray.reduce((totOcc, occurence) => totOcc + Number.parseInt(occurence), 0);
+    console.log(occ);
+    console.log(`${occ}/${students}`);
+    return occ/students === 1 ? 'full' : `${occ}/${students}`;
   }
 
   return (
@@ -35,10 +40,10 @@ const OpdrachtElement = ({ element, setSelectedElement, host = false }) => {
       {students > 0 ? 
       <div>
         <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 flex">
-          <div className={`bg-yellow-600 h-2 w-${widthVerhouding(occurrences[0])}`}></div>
-          <div className={`bg-red-600 h-2 w-${widthVerhouding(occurrences[1])}`}></div>
-          <div className={`bg-red-600 h-2 w-${widthVerhouding(occurrences[2]+occurrences[3])}`}></div>
-          <div className={`bg-green-600 h-2 w-${widthVerhouding(occurrences[4])}`}></div>
+          <div className={`bg-yellow-600 h-2 w-${widthVerhouding([occurrences[0]])}`}></div>
+          <div className={`bg-red-600 h-2 w-${widthVerhouding([occurrences[1]])}`}></div>
+          <div className={`bg-red-600 h-2 w-${widthVerhouding([occurrences[2],occurrences[3]])}`}></div>
+          <div className={`bg-green-600 h-2 w-${widthVerhouding([occurrences[4]])}`}></div>
         </div>
       </div>
         : <span>Nog geen rapporten</span>}
