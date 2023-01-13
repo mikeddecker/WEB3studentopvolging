@@ -17,8 +17,6 @@ const Opdracht = ({ setSelectedElement }) => {
       console.log(response.status);
       console.log(response);
       setKahootOpdrachtElement(response.data);
-      await setTimeout(200); // enkel wegens snelle rendering dat die zo soms nog wel en soms nog niet de nieuwe rapporten ophaald
-      socketContext.socket.emit('studentRapportUpdate');
     }
     getKahootOpdracht();
   }, [socketContext?.socket, tmpBeschr]);

@@ -46,6 +46,7 @@ const OpdrachtForm = ({ element }) => {
         setXtraTime(Number.parseInt(rapport.extraMinuten));
         setQuestions(rapport.vragen ? rapport.vragen : []);
         console.log(rapport);
+        socketContext.socket.emit('studentRapportUpdate');
       } else {
         console.error("Er ging iets mis");
       }

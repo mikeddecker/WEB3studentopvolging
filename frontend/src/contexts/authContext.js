@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import axios from 'axios';
 import { useLocalStorage } from "../utils/useLocalStorage";
 import { appUrl } from "../utils/constants";
@@ -7,12 +7,15 @@ import { useSockets } from "./socketContext";
 const AuthContext = createContext({ isAuthenticated: false, isLoading: true });
 
 export const AuthProvider = ({ children }) => {
+  const [didJustLogIn, setDidJustLogIn] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useLocalStorage(
     "isAuthenticated",
     false
   );
 
   const socketContext = useSockets();
+  socketContext.socket.on("studentLoggedIn", () => { setIsAuthenticated(true); setDidJustLogIn(Date.now()); console.log("in socket in auth");});
+  
  
   useEffect(() => {
     const verifyToken = async () => {
@@ -22,11 +25,11 @@ export const AuthProvider = ({ children }) => {
 
         if (response.status === 202) {
           setIsAuthenticated(true);
-
+          console.log("auth updated");
           if(socketContext.isConnected)
           {
             console.log("Sending 'you there!' since connected...");
-            socketContext.socket.emit("helo", "you there!");
+            socketContext.socket.emit("helo");
           }
           else {
             console.log("Not connected");
@@ -42,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     };
     console.log("Verifying token in authContext...");
     verifyToken();
-  }, [setIsAuthenticated, socketContext.isConnected, socketContext.socket]);
+  }, [setIsAuthenticated, isAuthenticated, didJustLogIn, socketContext.isConnected, socketContext.socket]);
 
 
   const value = useMemo(
@@ -52,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     [isAuthenticated]
   );
 
-  return <AuthContext.Provider value={value, isAuthenticated, setIsAuthenticated}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 // we exporteren de custom hook:

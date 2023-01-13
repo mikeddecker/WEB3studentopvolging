@@ -93,7 +93,7 @@ const DashboardScreen = ({ element }) => {
       }
     };
     updateKahootstatusOpdracht();
-  }, [opdrachtElement]);
+  }, [opdrachtElement, socketContext.socket]);
 
   return (
     <div className="container">

@@ -5,7 +5,7 @@ import { useAuthContext } from "../contexts/authContext";
 const ProtectedRoute = ({ children }) => {
   
   const { isAuthenticated } = useAuthContext();
-
+  console.log("Protected root");
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   } else {

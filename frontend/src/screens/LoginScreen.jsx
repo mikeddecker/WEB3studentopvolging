@@ -8,15 +8,19 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/authContext";
 import { appUrl } from "../utils/constants";
 
+import { useSockets } from "../contexts/socketContext";
+
 const LoginScreen = () => {
   const navigate = useNavigate();
+  const socketContext = useSockets();
 
   console.log("useAuthContextFromLoginscreen");
   const { isAuthenticated } = useAuthContext();
-    const [login, setLogin] = useState({
+  const [login, setLogin] = useState({
     email: "",
     pincode: "",
   });
+  socketContext.socket.on("authed", () => { console.log("did i get it"); navigate("/");});
   
   const handleChange = (event) => {
     setLogin((prevLogin) => ({
@@ -33,9 +37,9 @@ const LoginScreen = () => {
       console.log(login);
       const response = await axios.post(appUrl + "/students/login", login, {withCredentials: true});
       if (response.status === 202) {
+        socketContext.socket.emit("iLoggedIn");
         console.log(response.status);
-        // TODO : hij update hier de authStatus nog niet???
-        navigate("/");
+        console.log(response);
       }
     } catch (error) {
       console.error(error);

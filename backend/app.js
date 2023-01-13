@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
     console.log("User is disconnected");
   });
 
-  socket.on("helo", (m) => { console.log(m); });
+  socket.on("helo", () => { console.log("authed"); io.emit("authed"); });
 
   // rapportupdate doorgeven aan host
   socket.on("studentRapportUpdate", () => { console.log("rapportupdate van student"); io.emit("dashboardChange"); })
@@ -55,6 +55,9 @@ io.on("connection", (socket) => {
   socket.on("nkvh", (beschrijving) => { io.emit("nkvs",beschrijving); console.log("NieuweKahootVraagHost, NieuweKahootVraagServer");});
   // Student heeft kahoot opgehaald
   //socket.on("studentConnecteerdMetVraag", () => {io.emit("studentConnecteerdMetVraag");})
+
+  //Student heeft zich ingelogged
+  socket.on("iLoggedIn", () => io.emit("studentLoggedIn"));
 });
 
 server.listen(process.env.SERVER_PORT || 3000, () => {
