@@ -7,18 +7,18 @@ import { useSockets } from "./socketContext";
 const AuthContext = createContext({ isAuthenticated: false, isLoading: true });
 
 export const AuthProvider = ({ children }) => {
-  const [didJustLogIn, setDidJustLogIn] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useLocalStorage(
     "isAuthenticated",
     false
   );
 
   const socketContext = useSockets();
-  socketContext.socket.on("studentLoggedIn", () => { setIsAuthenticated(true); setDidJustLogIn(Date.now()); console.log("in socket in auth");});
-  
+  console.log("in authContext...");
+
  
   useEffect(() => {
     const verifyToken = async () => {
+      console.log("verifying token");
       try {
         console.log(appUrl);
         const response = await axios.get(appUrl + "/students/verifytoken", {withCredentials: true});
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     };
     console.log("Verifying token in authContext...");
     verifyToken();
-  }, [setIsAuthenticated, isAuthenticated, didJustLogIn, socketContext.isConnected, socketContext.socket]);
+  }, [setIsAuthenticated, children, socketContext.isConnected, socketContext.socket]);
 
 
   const value = useMemo(

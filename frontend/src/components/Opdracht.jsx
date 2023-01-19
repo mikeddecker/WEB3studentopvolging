@@ -4,7 +4,7 @@ import OpdrachtForm from "./OpdrachtForm";
 import { useSockets } from "../contexts/socketContext";
 import axios from 'axios';
 
-const Opdracht = ({ setSelectedElement }) => {
+const Opdracht = () => {
   const [kahootOpdrachtElement, setKahootOpdrachtElement] = useState(undefined);
   const [tmpBeschr, setTmpBeschr] = useState((new Date(Date.now())).toISOString());
 

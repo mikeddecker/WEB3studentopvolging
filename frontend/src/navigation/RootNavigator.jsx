@@ -21,7 +21,7 @@ const RootNavigator = () => {
           path="/"
           element={
             <ProtectedRoute>
-              <HomeScreen setSelectedElement={setSelectedElement} />
+              <HomeScreen />
             </ProtectedRoute>
           }
         />

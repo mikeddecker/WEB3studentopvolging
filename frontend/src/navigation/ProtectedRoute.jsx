@@ -3,8 +3,10 @@ import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../contexts/authContext";
 
 const ProtectedRoute = ({ children }) => {
-  
-  const { isAuthenticated } = useAuthContext();
+  isAuthenticated = true;
+  value; 
+  console.log(children);
+  const { isAuthenticated } = useAuthContext(Date.now());
   console.log("Protected root");
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
